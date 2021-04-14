@@ -4,7 +4,7 @@
 <!-- markdownlint-disable MD046 -->
 <!-- markdownlint-disable MD029 -->
 
-# 井畅钱包SDK文档(jingtum-lib-java)
+# 井畅钱包SDK文档(jcc-wallet-java)
 
 ## 安装和导入(maven)
 
