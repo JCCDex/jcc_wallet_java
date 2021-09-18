@@ -20,7 +20,7 @@ public class Config {
 	public static Integer FEE = 100;
 	
 	public static void setAlphabet(String alphabet) {
-		b58 = new B58(alphabet);
+		b58 = new B58(alphabet,false);
 		b58IdentiferCodecs = new B58IdentiferCodecs(b58);
 	}
 	
@@ -55,7 +55,7 @@ public class Config {
 	 */
 	static {
 		
-		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+		Security.addProvider(new BouncyCastleProvider());
 		setAlphabet(DEFAULT_ALPHABET);
 		setFeeCushion(1.1);
 		initBouncy();

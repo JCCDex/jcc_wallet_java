@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 import com.jccdex.core.utils.HashUtils;
+import com.jccdex.core.utils.SM3HashUtils;
 
 public class B58 {
 	public static class Decoded {
@@ -19,9 +20,11 @@ public class B58 {
 
 	private int[] mIndexes;
 	private char[] mAlphabet;
+	private boolean guomi =false;
 
-	public B58(String alphabet) {
+	public B58(String alphabet,boolean guomi) {
 		setAlphabet(alphabet);
+		this.guomi = guomi;
 		buildIndexes();
 	}
 
@@ -77,7 +80,12 @@ public class B58 {
 		byte[] buffer = new byte[input.length + version.length];
 		System.arraycopy(version, 0, buffer, 0, version.length);
 		System.arraycopy(input, 0, buffer, version.length, input.length);
-		byte[] checkSum = copyOfRange(HashUtils.doubleDigest(buffer), 0, 4);
+		byte[] checkSum;
+		if (guomi) {
+			checkSum = copyOfRange(SM3HashUtils.doubleDigest(buffer), 0, 4);
+		}else{
+			checkSum = copyOfRange(HashUtils.doubleDigest(buffer), 0, 4);
+		}
 		byte[] output = new byte[buffer.length + checkSum.length];
 		System.arraycopy(buffer, 0, output, 0, buffer.length);
 		System.arraycopy(checkSum, 0, output, buffer.length, checkSum.length);
@@ -213,7 +221,12 @@ public class B58 {
 			throw new EncodingFormatException("Input too short");
 		}
 		byte[] toHash = copyOfRange(buffer, 0, buffer.length - 4);
-		byte[] hashed = copyOfRange(HashUtils.doubleDigest(toHash), 0, 4);
+		byte[] hashed;
+		if (guomi) {
+			hashed = copyOfRange(SM3HashUtils.doubleDigest(toHash), 0, 4);
+		}else{
+			hashed = copyOfRange(HashUtils.doubleDigest(toHash), 0, 4);
+		}
 		byte[] checksum = copyOfRange(buffer, buffer.length - 4, buffer.length);
 		//TODO:下关关闭了校验，稍后确认问题
 //		if (!Arrays.equals(checksum, hashed)) {
