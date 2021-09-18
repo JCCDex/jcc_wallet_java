@@ -1,0 +1,9 @@
+com.jccdex.core.client
+com.jccdex.core.config
+com.jccdex.core.crypto.ecdsa
+com.jccdex.core.crypto.sjcljson
+com.jccdex.core.encoding
+com.jccdex.core.encoding.base58
+com.jccdex.core.encoding.common
+com.jccdex.core.exceptions
+com.jccdex.core.utils
