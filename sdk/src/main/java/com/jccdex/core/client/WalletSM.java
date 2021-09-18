@@ -1,16 +1,16 @@
 package com.jccdex.core.client;
 
-import com.jccdex.core.config.Config;
+import com.jccdex.core.config.ConfigSM;
 import com.jccdex.core.crypto.ecdsa.IKeyPair;
-import com.jccdex.core.crypto.ecdsa.Seed;
+import com.jccdex.core.crypto.ecdsa.SeedSM;
 import com.jccdex.core.encoding.B58IdentiferCodecs;
 import com.jccdex.core.encoding.common.B16;
 
 /**
- * 井通联盟链钱包工具类(非国密)
+ * 井通联盟链钱包工具类(国密)
  * @author xdjiang
  */
-public class Wallet {
+public class WalletSM {
 
 	// 钱包keypairs属性
 	private IKeyPair keypairs = null;
@@ -19,15 +19,15 @@ public class Wallet {
 	private String secret = null;
 
 	//钱包字母表
-	private String alphabet = Config.DEFAULT_ALPHABET;
+	private String alphabet = ConfigSM.DEFAULT_ALPHABET;
 
 
 	/**
 	 * 创建钱包对象(新钱包)
 	 */
-	public Wallet() {
-		String secret = Seed.random();
-		this.keypairs = Seed.fromBase58(secret).keyPair();
+	public WalletSM() {
+		String secret = SeedSM.random();
+		this.keypairs = SeedSM.fromBase58(secret).keyPair();
 		this.secret = secret;
 	}
 
@@ -35,8 +35,8 @@ public class Wallet {
 	 * 创建钱包对象，已知密钥
 	 * @param secret 钱包密钥
 	 */
-	public Wallet(String secret) {
-		this.keypairs = Seed.fromBase58(secret).keyPair();
+	public WalletSM(String secret) {
+		this.keypairs = SeedSM.fromBase58(secret).keyPair();
 		this.secret = secret;
 	}
 
@@ -45,11 +45,11 @@ public class Wallet {
 	 * @param secret 钱包密钥
 	 * @param alphabet 字母表，每一条联盟链都可以用不同的或者相同alphabet
 	 */
-	public Wallet(String secret, String alphabet) {
-		Config.setAlphabet(alphabet);
+	public WalletSM(String secret, String alphabet) {
+		ConfigSM.setAlphabet(alphabet);
 		this.alphabet = alphabet;
 
-		this.keypairs = Seed.fromBase58(secret).keyPair();
+		this.keypairs = SeedSM.fromBase58(secret).keyPair();
 		this.secret = secret;
 	}
 
@@ -57,8 +57,8 @@ public class Wallet {
 	 * 随机生成钱包地址
 	 * @return 钱包对象
 	 */
-	public static Wallet generate() {
-		return new Wallet();
+	public static WalletSM generate() {
+		return new WalletSM();
 	}
 
 	/**
@@ -66,11 +66,11 @@ public class Wallet {
 	 * @param alphabet 字母表，每一条联盟链都可以用不同的或者相同alphabet
 	 * @return 钱包对象
 	 */
-	public static Wallet generate(String alphabet) {
-		Config.setAlphabet(alphabet);
-		String secret = Seed.random();
-		IKeyPair keypairs = Seed.fromBase58(secret).keyPair();
-		Wallet wallet = new Wallet();
+	public static WalletSM generate(String alphabet) {
+		ConfigSM.setAlphabet(alphabet);
+		String secret = SeedSM.random();
+		IKeyPair keypairs = SeedSM.fromBase58(secret).keyPair();
+		WalletSM wallet = new WalletSM();
 		wallet.setKeypairs(keypairs);
 		wallet.setSecret(secret);
 		wallet.setAlphabet(alphabet);
@@ -82,8 +82,8 @@ public class Wallet {
 	 * @param secret
 	 * @return 钱包对象
 	 */
-	public static Wallet fromSecret(String secret) {
-		Wallet wallet = new Wallet(secret);
+	public static WalletSM fromSecret(String secret) {
+		WalletSM wallet = new WalletSM(secret);
 		return wallet;
 	}
 
@@ -93,8 +93,8 @@ public class Wallet {
 	 * @param alphabet 字母表，每一条联盟链都可以用不同的或者相同alphabet
 	 * @return 钱包对象
 	 */
-	public static Wallet fromSecret(String secret, String alphabet) {
-		Wallet wallet = new Wallet(secret, alphabet);
+	public static WalletSM fromSecret(String secret, String alphabet) {
+		WalletSM wallet = new WalletSM(secret, alphabet);
 		return wallet;
 	}
 
@@ -105,7 +105,7 @@ public class Wallet {
 	 */
 	public static boolean isValidAddress(String address) {
 		try {
-			Config.getB58IdentiferCodecs().decode(address, B58IdentiferCodecs.VER_ACCOUNT_ID);
+			ConfigSM.getB58IdentiferCodecs().decode(address, B58IdentiferCodecs.VER_ACCOUNT_ID);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -120,8 +120,8 @@ public class Wallet {
 	 */
 	public static boolean isValidAddress(String address, String alphabet) {
 		try {
-			Config.setAlphabet(alphabet);
-			Config.getB58IdentiferCodecs().decode(address, B58IdentiferCodecs.VER_ACCOUNT_ID);
+			ConfigSM.setAlphabet(alphabet);
+			ConfigSM.getB58IdentiferCodecs().decode(address, B58IdentiferCodecs.VER_ACCOUNT_ID);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -135,7 +135,7 @@ public class Wallet {
 	 */
 	public static boolean isValidSecret(String secret) {
 		try {
-			Seed.fromBase58(secret).keyPair();
+			SeedSM.fromBase58(secret).keyPair();
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -150,8 +150,8 @@ public class Wallet {
 	 */
 	public static boolean isValidSecret(String secret, String alphabet) {
 		try {
-			Config.setAlphabet(alphabet);
-			Seed.fromBase58(secret).keyPair();
+			ConfigSM.setAlphabet(alphabet);
+			SeedSM.fromBase58(secret).keyPair();
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -169,7 +169,7 @@ public class Wallet {
 		}
 		return this.keypairs.canonicalPubHex();
 	}
-	
+
 	/**
 	 * 使用钱包密钥对信息进行签名
 	 * @param message 需要签名的原文
@@ -179,7 +179,7 @@ public class Wallet {
 		byte[] der = this.keypairs.signMessage(message.getBytes());
 		return B16.toStringTrimmed(der);
 	}
-	
+
 	/**
 	 * 校验信息的自作签名是否正确
 	 * @param message 签名的原文
@@ -189,7 +189,7 @@ public class Wallet {
 	public boolean verify(String message, String signature) {
 		return this.keypairs.verifySignature(message.getBytes(), signature.getBytes());
 	}
-	
+
 	/**
 	 * 获取钱包地址
 	 * @return 钱包地址
@@ -197,7 +197,7 @@ public class Wallet {
 	public String getAddress() {
 		byte[] bytes = this.keypairs.pub160Hash();
 
-		return Config.getB58IdentiferCodecs().encodeAddress(bytes);
+		return ConfigSM.getB58IdentiferCodecs().encodeAddress(bytes);
 	}
 
 	/**
@@ -238,7 +238,7 @@ public class Wallet {
 	 */
 	public void setAlphabet(String alphabet) {
 		this.alphabet = alphabet;
-		Config.setAlphabet(alphabet);
+		ConfigSM.setAlphabet(alphabet);
 	}
 
 	/**
