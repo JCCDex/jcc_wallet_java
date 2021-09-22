@@ -4,7 +4,7 @@ import org.bouncycastle.crypto.digests.SM3Digest;
 import java.security.NoSuchAlgorithmException;
 
 public class SM3 {
-	SM3Digest messageDigest;
+	public SM3Digest messageDigest;
 
 	public SM3() {
 		try {

@@ -32,7 +32,7 @@ public class SM2P256V1 {
 		return ecParams.getG();
 	}
 
-	static byte[] basePointMultipliedBy(BigInteger secret) {
+	public static byte[] basePointMultipliedBy(BigInteger secret) {
 		return basePoint().multiply(secret).getEncoded(true);
 	}
 }

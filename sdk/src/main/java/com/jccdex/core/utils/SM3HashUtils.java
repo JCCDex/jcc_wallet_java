@@ -24,6 +24,14 @@ public class SM3HashUtils {
 		sm3.add(sm3Hash);
 		return(sm3.finish());
 	}
+
+	public static byte[] Digest(byte[] bytes) {
+		SM3 sm3=new SM3();
+		sm3.add(bytes);
+		byte[] sm3Hash = sm3.finish();
+		return(sm3Hash);
+	}
+
 	public static byte[] SM3_RIPEMD160(byte[] input) {
 		try {
 			SM3 sm3=new SM3();
