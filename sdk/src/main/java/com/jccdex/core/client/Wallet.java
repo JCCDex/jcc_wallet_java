@@ -26,6 +26,8 @@ public class Wallet {
 	 * 创建钱包对象(新钱包)
 	 */
 	public Wallet() {
+		Config.setAlphabet(Config.DEFAULT_ALPHABET);
+		this.alphabet = Config.DEFAULT_ALPHABET;
 		String secret = Seed.random();
 		this.keypairs = Seed.fromBase58(secret).keyPair();
 		this.secret = secret;
@@ -36,6 +38,8 @@ public class Wallet {
 	 * @param secret 钱包密钥
 	 */
 	public Wallet(String secret) {
+		Config.setAlphabet(Config.DEFAULT_ALPHABET);
+		this.alphabet = Config.DEFAULT_ALPHABET;
 		this.keypairs = Seed.fromBase58(secret).keyPair();
 		this.secret = secret;
 	}

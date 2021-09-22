@@ -6,7 +6,6 @@ import org.junit.Test;
 import com.utils.JsonUtils;
 
 public class WalletTest {
-	Wallet wallet = null;
 	String VALID_SECRET = "sszWqvtbDzzMQEVWqGDSA5DbMYDBN";
 	String VALID_ADDRESS = "jahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRV";
 	String VAILD_PUBLIC_KEY = "023EDC5180579FB3E282A7F6B49EBFDACD447B1CBB7C8A7BC7FAB51D3076188E39";
@@ -40,16 +39,25 @@ public class WalletTest {
 	@Test
 	public void generate() {
 		try {
-			Wallet wallet = Wallet.generate();
+
 			// assert wallet == null : wallet.getAddress();
-			System.out.println("---------generate----------");
+			System.out.println("---------generate jingtum wallet----------");
+			Wallet wallet = Wallet.generate();
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 			System.out.println("publicKey=" + wallet.getPublicKey());
 			System.out.println(JsonUtils.toJsonString(wallet));
 			Assert.assertTrue(true);
+
+			System.out.println("---------generate bizain wallet----------");
+			Wallet walletBiz = Wallet.generate("bpshnaf39wBUDNEGHJKLM4PQRST7VWXYZ2jcdeCg65rkm8oFqi1tuvAxyz");
+			System.out.println("secret=" + walletBiz.getSecret());
+			System.out.println("address=" + walletBiz.getAddress());
+			System.out.println("publicKey=" + walletBiz.getPublicKey());
+			System.out.println(JsonUtils.toJsonString(walletBiz));
+			Assert.assertTrue(true);
 		} catch (Exception e) {
-			System.out.println("INVALID_SECRET1  为 空时 ：" + e.getMessage());
+			System.out.println("创建钱包出错 ：" + e.getMessage());
 			Assert.assertTrue(false);
 		}
 	}
@@ -61,7 +69,8 @@ public class WalletTest {
 	public void fromSecret() {
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(VALID_SECRET);
+			Wallet wallet = Wallet.fromSecret(VALID_SECRET);
+			String addresss = wallet.getAddress();
 			Assert.assertEquals(VALID_ADDRESS, wallet.getAddress());
 			Assert.assertEquals(VAILD_PUBLIC_KEY, wallet.getPublicKey());
 		} catch (Exception e) {
@@ -70,7 +79,7 @@ public class WalletTest {
 
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET1);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET1);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -78,7 +87,7 @@ public class WalletTest {
 		}
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET3);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET3);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -86,7 +95,7 @@ public class WalletTest {
 		}
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET4);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET4);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -94,7 +103,7 @@ public class WalletTest {
 		}
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET5);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET5);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -103,7 +112,7 @@ public class WalletTest {
 		}
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET6);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET6);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -111,7 +120,7 @@ public class WalletTest {
 		}
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET7);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET7);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -119,7 +128,7 @@ public class WalletTest {
 		}
 		try {
 			System.out.println("---------fromSecret----------");
-			wallet = Wallet.fromSecret(INVALID_SECRET8);
+			Wallet wallet = Wallet.fromSecret(INVALID_SECRET8);
 			System.out.println("secret=" + wallet.getSecret());
 			System.out.println("address=" + wallet.getAddress());
 		} catch (Exception e) {
@@ -273,48 +282,48 @@ public class WalletTest {
 	@Test
 	public void structure() {
 		try {
-			wallet = new Wallet(VALID_SECRET);
+			Wallet wallet = new Wallet(VALID_SECRET);
 			System.out.println(wallet.getSecret() + "  " + VALID_SECRET);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET1);
+			Wallet wallet = new Wallet(INVALID_SECRET1);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET2);
+			Wallet wallet = new Wallet(INVALID_SECRET2);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET3);
+			Wallet wallet = new Wallet(INVALID_SECRET3);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET4);
+			Wallet wallet = new Wallet(INVALID_SECRET4);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET5);
+			Wallet wallet = new Wallet(INVALID_SECRET5);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET6);
+			Wallet wallet = new Wallet(INVALID_SECRET6);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET7);
+			Wallet wallet = new Wallet(INVALID_SECRET7);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
 		try {
-			wallet = new Wallet(INVALID_SECRET8);
+			Wallet wallet = new Wallet(INVALID_SECRET8);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}
@@ -325,7 +334,7 @@ public class WalletTest {
 	 */
 	@Test
 	public void structureInit() {
-		wallet = new Wallet(VALID_SECRET);
+		Wallet wallet = new Wallet(VALID_SECRET);
 		try {
 			String signStr = wallet.sign(MESSAGE1);
 			System.out.println(signStr.equals(SIGNATURE1) + "\t" + signStr + "\t" + SIGNATURE1);

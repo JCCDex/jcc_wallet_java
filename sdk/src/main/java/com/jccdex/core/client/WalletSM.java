@@ -26,6 +26,9 @@ public class WalletSM {
 	 * 创建钱包对象(新钱包)
 	 */
 	public WalletSM() {
+		ConfigSM.setAlphabet(alphabet);
+		this.alphabet = alphabet;
+
 		String secret = SeedSM.random();
 		this.keypairs = SeedSM.fromBase58(secret).keyPair();
 		this.secret = secret;
@@ -36,6 +39,9 @@ public class WalletSM {
 	 * @param secret 钱包密钥
 	 */
 	public WalletSM(String secret) {
+		ConfigSM.setAlphabet(alphabet);
+		this.alphabet = alphabet;
+
 		this.keypairs = SeedSM.fromBase58(secret).keyPair();
 		this.secret = secret;
 	}
