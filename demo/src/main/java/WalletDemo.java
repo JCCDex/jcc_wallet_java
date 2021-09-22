@@ -1,6 +1,10 @@
 import com.jccdex.core.client.Wallet;
 import com.jccdex.core.client.WalletSM;
 
+/**
+ * 非国密版本钱包Demo
+ * @author xdjiiang
+ */
 public class WalletDemo {
     public static void main(String[] args) {
         //------------------非国密版钱包----------------------
@@ -22,12 +26,5 @@ public class WalletDemo {
         System.out.println("钱包密钥:"+wallet3.getSecret());
         System.out.println("钱包地址:"+wallet3.getAddress());
         System.out.println("--------------------------------------------------------------");
-
-        //------------------非国密版钱包----------------------
-        //创建公链国密版新钱包
-        WalletSM wallet4 = WalletSM.generate();
-        System.out.println("创建公链国密版钱包:");
-        System.out.println("钱包密钥:"+wallet4.getSecret());
-        System.out.println("钱包地址:"+wallet4.getAddress());
     }
 }
