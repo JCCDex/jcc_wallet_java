@@ -1,12 +1,17 @@
 package com.jccdex.core.client;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.utils.JsonUtils;
 
 public class WalletSMTest {
 	WalletSM wallet = null;
-	String VALID_ADDRESS = "jhsEiKUgmucGDvQSFnDxiAZn3V7iJzAmXN";
+	String VALID_SECRET = "sncXGdy6qAroErnTveCY6J8Z28Ua9";
+	String VALID_ADDRESS = "jpVvaRgkwHwzi1MZm9Qmj3VbyEXEYEagUF";
+	String VAILD_PUBLIC_KEY = "02E14F2156E8D9CDEFC42FD99B17D4906E7A9DD64290D10E50D8895ACBA7294581";
+	String VAILD_PRIVATE_KEY = 	"000745C30AFE8C78FCD4705B047463B71E363EA76ED7C617A0A1C885DBF9744D0C";
+
 	String INVALID_ADDRESS1 = null;
 	String INVALID_ADDRESS2 = null;
 	String INVALID_ADDRESS3 = "";
@@ -15,7 +20,6 @@ public class WalletSMTest {
 	String INVALID_ADDRESS6 = "jahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRVxxx";
 	String INVALID_ADDRESS7 = "ahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRV";
 	String INVALID_ADDRESS8 = "jahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRVjahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRV";
-	String VALID_SECRET = "sp1hkS7QN2fWieZ9moXrvf6xzjCZ8";
 	String INVALID_SECRET1 = null;
 	String INVALID_SECRET2 = null;
 	String INVALID_SECRET3 = "";
@@ -35,13 +39,20 @@ public class WalletSMTest {
 	 */
 	@Test
 	public void generate() {
-		WalletSM wallet = WalletSM.generate();
-		// assert wallet == null : wallet.getAddress();
-		System.out.println("---------generate----------");
-		System.out.println("secret=" + wallet.getSecret());
-		System.out.println("address=" + wallet.getAddress());
-		System.out.println("publicKey=" + wallet.getPublicKey());
-		System.out.println(JsonUtils.toJsonString(wallet));
+		try {
+			WalletSM wallet = WalletSM.generate();
+			// assert wallet == null : wallet.getAddress();
+			System.out.println("---------generate----------");
+			System.out.println("secret=" + wallet.getSecret());
+			System.out.println("address=" + wallet.getAddress());
+			System.out.println("publicKey=" + wallet.getPublicKey());
+			System.out.println(JsonUtils.toJsonString(wallet));
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			System.out.println("INVALID_SECRET1  为 空时 ：" + e.getMessage());
+			Assert.assertTrue(false);
+		}
+
 	}
 
 	/**
@@ -49,12 +60,15 @@ public class WalletSMTest {
 	 */
 	@Test
 	public void fromSecret() {
-		System.out.println("---------fromSecret----------");
-		wallet = WalletSM.fromSecret(VALID_SECRET);
-		System.out.println("publicKey=" + wallet.getPublicKey());
-		wallet = WalletSM.fromSecret(VALID_SECRET);
-		System.out.println("secret=" + wallet.getSecret());
-		System.out.println("address=" + wallet.getAddress());
+		try {
+			System.out.println("---------fromSecret----------");
+			wallet = WalletSM.fromSecret(VALID_SECRET);
+			Assert.assertEquals(VALID_ADDRESS, wallet.getAddress());
+			Assert.assertEquals(VAILD_PUBLIC_KEY, wallet.getPublicKey());
+		} catch (Exception e) {
+			System.out.println("INVALID_SECRET1  为 NULL时 ：" + e.getMessage());
+		}
+
 		try {
 			System.out.println("---------fromSecret----------");
 			wallet = WalletSM.fromSecret(INVALID_SECRET1);
@@ -261,7 +275,7 @@ public class WalletSMTest {
 	public void structure() {
 		try {
 			wallet = new WalletSM(VALID_SECRET);
-			System.out.println(wallet.getSecret() + "  " + VALID_SECRET);
+			System.out.println(wallet.getAddress() + "  " + VALID_SECRET);
 		} catch (Exception e) {
 			System.out.println("创建钱包  异常：" + e.getMessage());
 		}

@@ -1,12 +1,17 @@
 package com.jccdex.core.client;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.utils.JsonUtils;
 
 public class WalletTest {
 	Wallet wallet = null;
+	String VALID_SECRET = "sszWqvtbDzzMQEVWqGDSA5DbMYDBN";
 	String VALID_ADDRESS = "jahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRV";
+	String VAILD_PUBLIC_KEY = "023EDC5180579FB3E282A7F6B49EBFDACD447B1CBB7C8A7BC7FAB51D3076188E39";
+	String VAILD_PRIVATE_KEY = 	"00D239DA526E2C662AC8EB2AACD8145020D3B0D5F870DCA23A21EF90928F27AD79";
+
 	String INVALID_ADDRESS1 = null;
 	String INVALID_ADDRESS2 = null;
 	String INVALID_ADDRESS3 = "";
@@ -15,7 +20,6 @@ public class WalletTest {
 	String INVALID_ADDRESS6 = "jahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRVxxx";
 	String INVALID_ADDRESS7 = "ahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRV";
 	String INVALID_ADDRESS8 = "jahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRVjahbmVT3T9yf5D4Ykw8x6nRUtUfAAMzBRV";
-	String VALID_SECRET = "sszWqvtbDzzMQEVWqGDSA5DbMYDBN";
 	String INVALID_SECRET1 = null;
 	String INVALID_SECRET2 = null;
 	String INVALID_SECRET3 = "";
@@ -35,13 +39,19 @@ public class WalletTest {
 	 */
 	@Test
 	public void generate() {
-		Wallet wallet = Wallet.generate();
-		// assert wallet == null : wallet.getAddress();
-		System.out.println("---------generate----------");
-		System.out.println("secret=" + wallet.getSecret());
-		System.out.println("address=" + wallet.getAddress());
-		System.out.println("publicKey=" + wallet.getPublicKey());
-		System.out.println(JsonUtils.toJsonString(wallet));
+		try {
+			Wallet wallet = Wallet.generate();
+			// assert wallet == null : wallet.getAddress();
+			System.out.println("---------generate----------");
+			System.out.println("secret=" + wallet.getSecret());
+			System.out.println("address=" + wallet.getAddress());
+			System.out.println("publicKey=" + wallet.getPublicKey());
+			System.out.println(JsonUtils.toJsonString(wallet));
+			Assert.assertTrue(true);
+		} catch (Exception e) {
+			System.out.println("INVALID_SECRET1  为 空时 ：" + e.getMessage());
+			Assert.assertTrue(false);
+		}
 	}
 	
 	/**
@@ -49,12 +59,15 @@ public class WalletTest {
 	 */
 	@Test
 	public void fromSecret() {
-		System.out.println("---------fromSecret----------");
-		wallet = Wallet.fromSecret(VALID_SECRET);
-		System.out.println("publicKey=" + wallet.getPublicKey());
-		wallet = Wallet.fromSecret(VALID_SECRET);
-		System.out.println("secret=" + wallet.getSecret());
-		System.out.println("address=" + wallet.getAddress());
+		try {
+			System.out.println("---------fromSecret----------");
+			wallet = Wallet.fromSecret(VALID_SECRET);
+			Assert.assertEquals(VALID_ADDRESS, wallet.getAddress());
+			Assert.assertEquals(VAILD_PUBLIC_KEY, wallet.getPublicKey());
+		} catch (Exception e) {
+			System.out.println("INVALID_SECRET1  为 NULL时 ：" + e.getMessage());
+		}
+
 		try {
 			System.out.println("---------fromSecret----------");
 			wallet = Wallet.fromSecret(INVALID_SECRET1);
