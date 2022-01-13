@@ -2,6 +2,7 @@ package com.jccdex.core.client;
 
 import com.jccdex.core.config.ConfigSM;
 import com.jccdex.core.crypto.ecdsa.IKeyPair;
+import com.jccdex.core.crypto.ecdsa.SM2KeyPair;
 import com.jccdex.core.crypto.ecdsa.SeedSM;
 import com.jccdex.core.encoding.B58IdentiferCodecs;
 import com.jccdex.core.encoding.common.B16;
@@ -183,7 +184,18 @@ public class WalletSM {
 	 */
 	public String sign(String message) {
 		byte[] der = this.keypairs.signMessage(message.getBytes());
-		return B16.toStringTrimmed(der);
+		return B16.encode(der);
+	}
+
+	/**
+	 * 校验信息的自作签名是否正确
+	 * @param message 签名的原文
+	 * @param signature 签名后的内容
+	 * @param publicKey 公钥
+	 * @return true:校验通过，false:校验不通过
+	 */
+	public static boolean verify(String message, String signature,String publicKey) {
+		return SM2KeyPair.verify(message.getBytes(),B16.decode(signature), publicKey);
 	}
 
 	/**
@@ -193,7 +205,7 @@ public class WalletSM {
 	 * @return true:校验通过，false:校验不通过
 	 */
 	public boolean verify(String message, String signature) {
-		return this.keypairs.verifySignature(message.getBytes(), signature.getBytes());
+		return this.keypairs.verifySignature(message.getBytes(), B16.decode(signature));
 	}
 
 	/**

@@ -2,9 +2,12 @@ package com.jccdex.core.client;
 
 import com.jccdex.core.config.Config;
 import com.jccdex.core.crypto.ecdsa.IKeyPair;
+import com.jccdex.core.crypto.ecdsa.K256KeyPair;
+import com.jccdex.core.crypto.ecdsa.SM2KeyPair;
 import com.jccdex.core.crypto.ecdsa.Seed;
 import com.jccdex.core.encoding.B58IdentiferCodecs;
 import com.jccdex.core.encoding.common.B16;
+import java.util.Arrays;
 
 /**
  * 井通联盟链钱包工具类(非国密)
@@ -180,10 +183,29 @@ public class Wallet {
 	 * @return 签名后的内容
 	 */
 	public String sign(String message) {
-		byte[] der = this.keypairs.signMessage(message.getBytes());
+		return signData(message.getBytes());
+	}
+
+	/**
+	 * 使用钱包密钥对信息进行签名
+	 * @param data 需要签名的原文
+	 * @return 签名后的内容
+	 */
+	public String signData(byte[] data) {
+		byte[] der = this.keypairs.signMessage(data);
 		return B16.toStringTrimmed(der);
 	}
-	
+
+	/**
+	 * 校验信息的自作签名是否正确
+	 * @param signature 签名的原文
+	 * @param signature 签名后的内容
+	 * @return true:校验通过，false:校验不通过
+	 */
+	public boolean verifyData(byte[] data, String signature) {
+		return this.keypairs.verifySignature(data, B16.decode(signature));
+	}
+
 	/**
 	 * 校验信息的自作签名是否正确
 	 * @param message 签名的原文
@@ -191,9 +213,20 @@ public class Wallet {
 	 * @return true:校验通过，false:校验不通过
 	 */
 	public boolean verify(String message, String signature) {
-		return this.keypairs.verifySignature(message.getBytes(), signature.getBytes());
+		return verifyData(message.getBytes(), signature);
 	}
-	
+
+	/**
+	 * 校验信息的自作签名是否正确
+	 * @param message 签名的原文
+	 * @param signature 签名后的内容
+	 * @param publicKey 公钥
+	 * @return true:校验通过，false:校验不通过
+	 */
+	public static boolean verify(String message, String signature,String publicKey) {
+		return K256KeyPair.verify(message.getBytes(),B16.decode(signature), publicKey);
+	}
+
 	/**
 	 * 获取钱包地址
 	 * @return 钱包地址

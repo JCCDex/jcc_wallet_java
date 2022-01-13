@@ -2,6 +2,8 @@ package com.jccdex.core.crypto.ecdsa;
 
 import java.math.BigInteger;
 
+import com.jccdex.core.encoding.common.B16;
+import com.jccdex.core.utils.SM3HashUtils;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
@@ -91,6 +93,12 @@ public class K256KeyPair implements IKeyPair {
 		ECPublicKeyParameters params = new ECPublicKeyParameters(pubPoint, SECP256K1.params());
 		signer.init(false, params);
 		return signer.verifySignature(data, signature.r, signature.s);
+	}
+
+	public static boolean verify(byte[] data, byte[] sigBytes, String publicKey) {
+		byte[] hash = HashUtils.halfSha512(data);
+		BigInteger pub =  Utils.uBigInt(B16.decode(publicKey));
+		return(verify(hash,sigBytes,pub));
 	}
 
 	public static byte[] signHash(byte[] bytes, BigInteger secret) {

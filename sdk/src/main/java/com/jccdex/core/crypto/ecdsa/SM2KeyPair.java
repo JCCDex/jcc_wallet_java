@@ -1,17 +1,20 @@
 package com.jccdex.core.crypto.ecdsa;
 
+import com.jccdex.core.encoding.common.B16;
 import com.jccdex.core.utils.SM3;
 import com.jccdex.core.utils.SM3HashUtils;
 import com.jccdex.core.utils.Utils;
 import org.bouncycastle.crypto.params.ECPrivateKeyParameters;
+import org.bouncycastle.crypto.params.ParametersWithRandom;
 import org.bouncycastle.crypto.params.ECPublicKeyParameters;
-import org.bouncycastle.crypto.signers.ECDSASigner;
-import org.bouncycastle.crypto.signers.HMacDSAKCalculator;
 import org.bouncycastle.math.ec.ECPoint;
+import org.bouncycastle.crypto.signers.SM2Signer;
 
+import java.security.SecureRandom;
 import java.math.BigInteger;
 
 public class SM2KeyPair implements IKeyPair {
+    public static  String DefaultUserId = "1234567812345678";
     BigInteger priv, pub, secretKey;
     byte[] pubBytes;
 
@@ -81,37 +84,45 @@ public class SM2KeyPair implements IKeyPair {
     }
 
     public static boolean verify(byte[] data, byte[] sigBytes, BigInteger pub) {
-        ECDSASignature signature = ECDSASignature.decodeFromDER(sigBytes);
-        if (signature == null) {
-            return false;
+        try {
+            SM2Signer signer =  new SM2Signer();
+            ECPoint pubPoint = SM2P256V1.curve().decodePoint(pub.toByteArray());
+            ECPublicKeyParameters params = new ECPublicKeyParameters(pubPoint, SM2P256V1.params());
+            signer.init(false,params);
+            signer.update(data,0,data.length);
+            return(signer.verifySignature(sigBytes));
+        }catch (Exception ex)
+        {
+            System.out.println("error:"+ex.getMessage());
+            return(false);
         }
-        ECDSASigner signer = new ECDSASigner();
-        ECPoint pubPoint = SM2P256V1.curve().decodePoint(pub.toByteArray());
-        ECPublicKeyParameters params = new ECPublicKeyParameters(pubPoint, SM2P256V1.params());
-        signer.init(false, params);
-        return signer.verifySignature(data, signature.r, signature.s);
     }
 
+    public static boolean verify(byte[] data, byte[] sigBytes, String publicKey) {
+        byte[] hash = SM3HashUtils.Digest(data);
+        BigInteger pub =  Utils.uBigInt(B16.decode(publicKey));
+        return(verify(hash,sigBytes,pub));
+    }
     public static byte[] signHash(byte[] bytes, BigInteger secret) {
-        ECDSASignature sig = createECDSASignature(bytes, secret);
-        byte[] der = sig.encodeToDER();
-        if (!ECDSASignature.isStrictlyCanonical(der)) {
-            throw new IllegalStateException("Signature is not strictly canonical");
-        }
+        byte[] der = createECDSASignature(bytes, secret);
         return der;
     }
 
-    private static ECDSASignature createECDSASignature(byte[] hash, BigInteger secret) {
-        ECDSASigner signer = new ECDSASigner(new HMacDSAKCalculator(new SM3().messageDigest));
-        ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(secret, SECP256K1.params());
-        signer.init(true, privKey);
-        BigInteger[] sigs = signer.generateSignature(hash);
-        BigInteger r = sigs[0], s = sigs[1];
-        BigInteger otherS = SECP256K1.order().subtract(s);
-        if (s.compareTo(otherS) == 1) {
-            s = otherS;
+    private static  byte[] createECDSASignature(byte[] hash, BigInteger secret) {
+        byte[] sigs= new byte[10];
+        try {
+            SM2Signer signer =  new SM2Signer();
+            ECPrivateKeyParameters privKey = new ECPrivateKeyParameters(secret, SM2P256V1.params());
+            ParametersWithRandom paramRandom = new ParametersWithRandom(privKey, SecureRandom.getInstance("SHA1PRNG"));
+            signer.init(true,paramRandom);
+            signer.update(hash,0,hash.length);
+            sigs = signer.generateSignature();
+            return sigs;
+        }catch (Exception ex)
+        {
+            System.out.println("error:"+ex.getMessage());
         }
-        return new ECDSASignature(r, s);
+        return sigs;
     }
 
     public boolean verifyHash(byte[] hash, byte[] sigBytes) {
