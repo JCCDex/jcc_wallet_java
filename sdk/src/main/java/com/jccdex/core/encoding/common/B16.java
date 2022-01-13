@@ -22,6 +22,6 @@ public class B16 {
 	}
 
 	public static byte[] decode(String hex) {
-		return decode(hex);
+		return  org.bouncycastle.util.encoders.Hex.decode(hex);
 	}
 }

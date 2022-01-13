@@ -356,4 +356,21 @@ public class WalletSMTest {
 			System.out.println("钱包签名  异常：" + e.getMessage());
 		}
 	}
+
+	/**
+	 * 签名与验签
+	 */
+	@Test
+	public void signAndVerify() {
+		System.out.println("---------fromSecret----------");
+		String message = "1qazxsw2";
+		Wallet wallet = Wallet.fromSecret(VALID_SECRET);
+		String addresss = wallet.getAddress();
+		String pubKey = wallet.getPublicKey();
+		String sign = wallet.sign(message);
+		Boolean f1 = Wallet.verify(message,sign,pubKey);
+		Assert.assertTrue(f1);
+		Boolean f2 = Wallet.verify("1qazxsw3",sign,pubKey);
+		Assert.assertFalse(f2);
+	}
 }

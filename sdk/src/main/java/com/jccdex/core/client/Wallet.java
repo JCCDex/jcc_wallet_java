@@ -3,11 +3,9 @@ package com.jccdex.core.client;
 import com.jccdex.core.config.Config;
 import com.jccdex.core.crypto.ecdsa.IKeyPair;
 import com.jccdex.core.crypto.ecdsa.K256KeyPair;
-import com.jccdex.core.crypto.ecdsa.SM2KeyPair;
 import com.jccdex.core.crypto.ecdsa.Seed;
 import com.jccdex.core.encoding.B58IdentiferCodecs;
 import com.jccdex.core.encoding.common.B16;
-import java.util.Arrays;
 
 /**
  * 井通联盟链钱包工具类(非国密)
@@ -198,7 +196,7 @@ public class Wallet {
 
 	/**
 	 * 校验信息的自作签名是否正确
-	 * @param signature 签名的原文
+	 * @param data 签名的原文
 	 * @param signature 签名后的内容
 	 * @return true:校验通过，false:校验不通过
 	 */
