@@ -1,7 +1,9 @@
 package com.jccdex.core.client;
 
+import com.jccdex.core.config.Config;
 import com.jccdex.core.config.ConfigSM;
 import com.jccdex.core.crypto.ecdsa.IKeyPair;
+import com.jccdex.core.crypto.ecdsa.K256KeyPair;
 import com.jccdex.core.crypto.ecdsa.SM2KeyPair;
 import com.jccdex.core.crypto.ecdsa.SeedSM;
 import com.jccdex.core.encoding.B58IdentiferCodecs;
@@ -214,6 +216,17 @@ public class WalletSM {
 	 */
 	public String getAddress() {
 		byte[] bytes = this.keypairs.pub160Hash();
+
+		return ConfigSM.getB58IdentiferCodecs().encodeAddress(bytes);
+	}
+
+	/**
+	 * 通过公钥获取钱包地址
+	 * @param pubKey 公钥
+	 * @return 钱包地址
+	 */
+	public static  String getAddress(String pubKey) {
+		byte[] bytes = SM2KeyPair.pub160Hash(pubKey);
 
 		return ConfigSM.getB58IdentiferCodecs().encodeAddress(bytes);
 	}

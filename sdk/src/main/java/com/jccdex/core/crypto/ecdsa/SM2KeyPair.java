@@ -1,6 +1,7 @@
 package com.jccdex.core.crypto.ecdsa;
 
 import com.jccdex.core.encoding.common.B16;
+import com.jccdex.core.utils.HashUtils;
 import com.jccdex.core.utils.SM3;
 import com.jccdex.core.utils.SM3HashUtils;
 import com.jccdex.core.utils.Utils;
@@ -169,6 +170,11 @@ public class SM2KeyPair implements IKeyPair {
     @Override
     public byte[] pub160Hash() {
         return SM3HashUtils.SM3_RIPEMD160(pubBytes);
+    }
+
+    public static byte[] pub160Hash(String publicKey) {
+        BigInteger pub =  Utils.uBigInt(B16.decode(publicKey));
+        return SM3HashUtils.SM3_RIPEMD160(pub.toByteArray());
     }
 
     @Override

@@ -364,13 +364,28 @@ public class WalletSMTest {
 	public void signAndVerify() {
 		System.out.println("---------fromSecret----------");
 		String message = "1qazxsw2";
-		Wallet wallet = Wallet.fromSecret(VALID_SECRET);
+		WalletSM wallet = WalletSM.fromSecret(VALID_SECRET);
 		String addresss = wallet.getAddress();
 		String pubKey = wallet.getPublicKey();
 		String sign = wallet.sign(message);
-		Boolean f1 = Wallet.verify(message,sign,pubKey);
+		Boolean f1 = WalletSM.verify(message,sign,pubKey);
 		Assert.assertTrue(f1);
-		Boolean f2 = Wallet.verify("1qazxsw3",sign,pubKey);
+		Boolean f2 = WalletSM.verify("1qazxsw3",sign,pubKey);
 		Assert.assertFalse(f2);
+	}
+
+	/**
+	 * 获取公钥和钱包地址
+	 */
+	@Test
+	public void getPublicKeyAndAdress() {
+		System.out.println("---------fromSecret----------");
+		WalletSM wallet = WalletSM.fromSecret(VALID_SECRET);
+		String address1 = wallet.getAddress();
+		String pubKey = wallet.getPublicKey();
+		String address2 = WalletSM.getAddress(pubKey);
+		System.out.println("address1:"+address1);
+		System.out.println("pubKey:"+pubKey);
+		System.out.println("address2:"+address2);
 	}
 }

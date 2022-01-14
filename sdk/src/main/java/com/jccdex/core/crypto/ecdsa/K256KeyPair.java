@@ -169,6 +169,11 @@ public class K256KeyPair implements IKeyPair {
 		return HashUtils.SHA256_RIPEMD160(pubBytes);
 	}
 
+	public static byte[] pub160Hash(String publicKey) {
+		BigInteger pub =  Utils.uBigInt(B16.decode(publicKey));
+		return HashUtils.SHA256_RIPEMD160(pub.toByteArray());
+	}
+
 	@Override
 	public String canonicalPubHex() {
 		return Utils.bigHex(pub);

@@ -381,4 +381,19 @@ public class WalletTest {
 		Boolean f2 = Wallet.verify("1qazxsw3",sign,pubKey);
 		Assert.assertFalse(f2);
 	}
+
+	/**
+	 * 获取公钥和钱包地址
+	 */
+	@Test
+	public void getPublicKeyAndAdress() {
+		System.out.println("---------fromSecret----------");
+		Wallet wallet = Wallet.fromSecret(VALID_SECRET);
+		String address1 = wallet.getAddress();
+		String pubKey = wallet.getPublicKey();
+		String address2 = Wallet.getAddress(pubKey);
+		System.out.println("address1:"+address1);
+		System.out.println("pubKey:"+pubKey);
+		System.out.println("address2:"+address2);
+	}
 }

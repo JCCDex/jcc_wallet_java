@@ -236,6 +236,17 @@ public class Wallet {
 	}
 
 	/**
+	 * 通过公钥获取钱包地址
+	 * @param pubKey 公钥
+	 * @return 钱包地址
+	 */
+	public static  String getAddress(String pubKey) {
+		byte[] bytes =K256KeyPair.pub160Hash(pubKey);
+
+		return Config.getB58IdentiferCodecs().encodeAddress(bytes);
+	}
+
+	/**
 	 * 获取钱包密钥
 	 * @return 钱包密钥
 	 */
